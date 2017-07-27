@@ -35,28 +35,60 @@
 ##-*****************************************************************************
 
 SET( H_FILES
-     Transport.h
-     Viewer.h )
+     DrawContext.h
+     Drawable.h
+     Foundation.h
+     GLCamera.h
+     ICurvesDrw.h
+     INuPatchDrw.h
+     IObjectDrw.h
+     IPointsDrw.h
+     IPolyMeshDrw.h
+     ISubDDrw.h
+     IXformDrw.h
+     MeshDrwHelper.h
+     Scene.h
+     SceneWrapper.h
+     )
 
 SET( CXX_FILES
-     Transport.cpp
-     Viewer.cpp
-     main.cpp )
+     GLCamera.cpp
+     ICurvesDrw.cpp
+     INuPatchDrw.cpp
+     IObjectDrw.cpp
+     IPointsDrw.cpp
+     IPolyMeshDrw.cpp
+     ISubDDrw.cpp
+     IXformDrw.cpp
+     MeshDrwHelper.cpp
+     Scene.cpp
+     SceneWrapper.cpp
+     )
 
 SET( SOURCE_FILES ${CXX_FILES} ${H_FILES} )
-
 SET( THIS_LIBS
-    AlembicAbcOpenGL
-    ${ALEMBIC_ILMBASE_LIBS}
-    ${OPENGL_LIBS}
-    )
+     AlembicAbcGeom
+     AlembicAbcCoreFactory
+     AlembicAbc
+     AlembicAbcCoreHDF5
+     AlembicAbcCoreOgawa
+     AlembicAbcCoreAbstract
+     AlembicOgawa
+     AlembicUtil
+     ${ALEMBIC_HDF5_LIBS}
+     ${ALEMBIC_GL_LIBS}
+     ${ALEMBIC_ILMBASE_LIBS}
+     ${CMAKE_THREAD_LIBS_INIT}
+     ${ZLIB_LIBRARIES} ${EXTERNAL_MATH_LIBS} )
 
-INCLUDE_DIRECTORIES( "${ALEMBIC_SOURCE_DIR}/lib" )
+ADD_LIBRARY( AlembicAbcOpenGL ${SOURCE_FILES} )
+#TARGET_LINK_LIBRARIES( AlembicAbcOpenGL ${THIS_LIBS} )
 
-ADD_EXECUTABLE( SimpleAbcViewer ${SOURCE_FILES} )
-TARGET_LINK_LIBRARIES( SimpleAbcViewer ${THIS_LIBS} )
+INSTALL( TARGETS AlembicAbcOpenGL
+         LIBRARY DESTINATION lib
+         ARCHIVE DESTINATION lib/static )
 
-INSTALL( TARGETS SimpleAbcViewer
-         DESTINATION bin )
+INSTALL( FILES ${H_FILES}
+         DESTINATION include/AbcOpenGL
+         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ )
 
-#ADD_PYTHON_SCRIPT_INST( SimpleAbcViewerRenderit )
